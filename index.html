@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RUM Operations Monitoring demo</title>
+    <link rel="icon" href="data:," />
+  </head>
+  <body>
+    <header>
+      <h1>RUM Operations Monitoring <span class="muted">demo</span></h1>
+      <p>
+        An <strong>operation</strong> is a critical step in a user journey. The app calls
+        <code>startOperation</code> when the step begins and <code>succeedOperation</code> or
+        <code>failOperation</code> (<code>error</code> / <code>abandoned</code> / <code>other</code>) when it ends.
+        Datadog turns these into the <code>rum.measure.operation</code> and
+        <code>rum.measure.operation.duration</code> metrics, which you can use for monitors and SLOs.
+      </p>
+      <div id="banner" class="banner" hidden></div>
+    </header>
+
+    <main>
+      <section class="panel">
+        <h2>Settings</h2>
+        <form id="settings" class="settings">
+          <label>Latency (ms) <input type="number" name="latencyMs" value="400" min="0" max="10000" step="50" /></label>
+          <label>Jitter (%) <input type="number" name="jitter" value="50" min="0" max="100" /></label>
+          <label>Error rate (%) <input type="number" name="errorRate" value="15" min="0" max="100" /></label>
+          <label>Abandon rate (%) <input type="number" name="abandonRate" value="5" min="0" max="100" /></label>
+          <label>Ops / minute <input type="number" name="perMinute" value="60" min="1" max="1200" /></label>
+          <label>Concurrency <input type="number" name="concurrency" value="4" min="1" max="50" /></label>
+          <label>Mode
+            <select name="mode">
+              <option value="random">Random operation</option>
+              <option value="journey">Full checkout journey</option>
+            </select>
+          </label>
+        </form>
+        <div class="row">
+          <button id="gen-toggle" class="primary">Start traffic generator</button>
+          <button id="journey">Run full checkout once</button>
+          <button id="reset">Reset counters</button>
+          <span id="gen-status" class="muted"></span>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Operations</h2>
+        <table class="ops">
+          <thead>
+            <tr>
+              <th>Operation</th>
+              <th>Started</th>
+              <th>Success</th>
+              <th>Error</th>
+              <th>Abandoned</th>
+              <th>Success rate</th>
+              <th>Avg duration</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="ops-body"></tbody>
+        </table>
+      </section>
+
+      <section class="panel">
+        <h2>SDK calls <span class="muted">(latest first)</span></h2>
+        <ol id="log" class="log"></ol>
+      </section>
+    </main>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
